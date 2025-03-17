@@ -1,37 +1,50 @@
-import React, { useState } from "react";
-import { View, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, FlatList, ActivityIndicator } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../stores/store";
+import { fetchWeatherList, fetchWeather } from "../../../stores/appSlice";
 import Header from "../../../components/organisms/Header/Header.component";
 import SearchBar from "../../../components/molecules/SearchBar/SearchBar.component";
 import WeatherCard from "../../../components/organisms/WeatherCard/WeatherCard.component";
-import CityInfoSection from "../../../components/organisms/CityInfoSection/CityInfoSection.component";
 import { styles } from "./HomeScreen.style";
 
 const HomeScreen = () => {
+  const dispatch = useDispatch();
   const [searchText, setSearchText] = useState("");
 
-  // Mock veri
-  const cityData = {
-    city: "İstanbul",
-    country: "Türkiye",
-    population: "15M",
-    timezone: "GMT+3",
-    temperature: "18°C",
-    condition: "Güneşli",
-    icon: require("../../../../assets/sun.png"),
+  const { weatherList, searchResult, loading } = useSelector((state: RootState) => state.weather);
+
+  useEffect(() => {
+    dispatch(fetchWeatherList() as any);
+  }, []);
+  
+  const weatherData = useSelector((state: RootState) => state.weather);
+
+  const handleSearch = () => {
+    if (searchText.trim()) {
+      dispatch(fetchWeather(searchText.trim()) as any);
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Header title="Hava Durumu" />
-      <SearchBar
-        value={searchText}
-        onChangeText={setSearchText}
-        onSearchPress={() => console.log("Arama yap:", searchText)}
-      />
-      <ScrollView>
-        <WeatherCard city={cityData.city} temperature={cityData.temperature} condition={cityData.condition} icon={cityData.icon} />
-        <CityInfoSection cityName={cityData.city} country={cityData.country} population={cityData.population} timezone={cityData.timezone} />
-      </ScrollView>
+      {loading ? (
+        <ActivityIndicator size="large" color="#007AFF" />
+      ) : (
+        <FlatList
+          data={weatherList}
+          keyExtractor={(item) => item.city}
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 80 }}  // 👈 Tab Bar için boşluk eklendi
+          renderItem={({ item }) => (
+            <WeatherCard 
+              city={item.city} 
+              temperature={`${item.temperature}`}
+              condition={item.description} 
+              icon={item.icon} 
+            />
+          )}
+        />
+      )}
     </View>
   );
 };

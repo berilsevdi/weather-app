@@ -1,14 +1,21 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image, ImageSourcePropType } from "react-native";
 import { WeatherCardProps } from "./WeatherCard.types";
 import { styles } from "./WeatherCard.style";
-import WeatherInfo from "../../molecules/WeatherInfo/WeatherInfo.component";
+
+const getWeatherIcon = (iconCode?: string): ImageSourcePropType => {
+  return iconCode
+    ? { uri: `https://openweathermap.org/img/wn/${iconCode}@2x.png` }
+    : require("../../../../assets/sun.png");
+};
 
 const WeatherCard: React.FC<WeatherCardProps> = ({ city, temperature, condition, icon }) => {
   return (
     <View style={styles.card}>
       <Text style={styles.city}>{city}</Text>
-      <WeatherInfo temperature={temperature} condition={condition} icon={icon} />
+      <Image source={getWeatherIcon(icon)} style={styles.icon} />
+      <Text style={styles.temperature}>{`${temperature}°C`}</Text>  
+      <Text style={styles.condition}>{condition}</Text>
     </View>
   );
 };

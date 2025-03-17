@@ -17,4 +17,18 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 8,
   },
+  icon: {  // 👈 Eksik olanı ekledik
+    width: 50,
+    height: 50,
+    marginBottom: 8,
+  },
+  temperature: {  // 👈 Eksik olanı ekledik
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#333",
+  },
+  condition: {  // 👈 Eksik olanı ekledik
+    fontSize: 16,
+    color: "#666",
+  },
 });

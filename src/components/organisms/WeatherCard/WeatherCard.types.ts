@@ -4,7 +4,7 @@ type WeatherCardProps = {
   city: string;
   temperature: string;
   condition: string;
-  icon: ImageSourcePropType;
+  icon?: string; 
 };
 
 export type { WeatherCardProps };

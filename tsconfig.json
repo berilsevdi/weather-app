@@ -36,6 +36,7 @@
       "_context/*": ["./src/context/*"],
     }
   },
+  "include": ["@types/**/*.d.ts"],
   "exclude": ["node_modules"]
 }
 

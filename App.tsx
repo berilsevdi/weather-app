@@ -1,14 +1,15 @@
 import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
-import store from "./src/stores/store";
-import HomeScreen from "./src/scenes/HomeFlow/Home/HomeScreen.component";
+import store from "./src/stores/store";  // 👈 Store'u import ediyoruz
+import AppNavigator from "./src/navigations/AppNavigator";
 
-const App = () => {
+export default function App() {
   return (
-    <Provider store={store}>
-      <HomeScreen />
+    <Provider store={store}> 
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
     </Provider>
   );
-};
-
-export default App;
+}
