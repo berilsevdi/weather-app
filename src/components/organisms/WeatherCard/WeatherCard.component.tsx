@@ -8,7 +8,6 @@ import { RootStackParamList } from '../../../navigations/AppNavigator';
 import { styles } from './WeatherCard.style';
 import { WeatherCardProps } from './WeatherCard.types';
 
-
 const getWeatherIcon = (iconCode?: string): ImageSourcePropType => {
   return iconCode
     ? { uri: `https://openweathermap.org/img/wn/${iconCode}@2x.png` }
