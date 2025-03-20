@@ -1,14 +1,14 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ES7"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "ESNext",
+    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -16,25 +16,26 @@
     "jsx": "react-jsx",
     "strict": true,
     "baseUrl": ".",
-    "types": ["node", "react", "react-native"],
+    "types": ["node"],
     "paths": {
       "_assets/*": ["./src/assets/*"],
-      "_atoms/*": ["./src/components/atoms/*"],
-      "_molecules/*": ["./src/components/molecules/*"],
-      "_organisms/*": ["./src/components/organisms/*"],
+      "_atoms": ["./src/components/atoms"],
+      "_molecules": ["./src/components/molecules"],
+      "_organisms": ["./src/components/organisms"],
       "_hooks/*": ["./src/hooks/*"],
       "_locales/*": ["./src/locales/*"],
-      "_modals/*": ["./src/modals/*"],
+      "_modals": ["src/modals"],
       "_navigations/*": ["./src/navigations/*"],
       "_redux/*": ["./src/redux/*"],
       "_scenes/*": ["./src/scenes/*"],
       "_styles/*": ["./src/styles/*"],
       "_types/*": ["./src/types/*"],
       "_data/*": ["./src/data/*"],
-      "_services/*": ["./src/services/*"],
+      "_services/*data": ["./src/services/*"],
       "_utils/*": ["./src/utils/*"],
-      "_context/*": ["./src/context/*"]
+      "_context/*": ["./src/context/*"],
     }
   },
   "exclude": ["node_modules"]
 }
+
