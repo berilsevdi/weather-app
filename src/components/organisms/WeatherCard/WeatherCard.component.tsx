@@ -8,7 +8,6 @@ import { RootStackParamList } from '../../../navigations/AppNavigator';
 import { styles } from './WeatherCard.style';
 import { WeatherCardProps } from './WeatherCard.types';
 
-// ✅ Navigation tipi import edildi.
 
 const getWeatherIcon = (iconCode?: string): ImageSourcePropType => {
   return iconCode
@@ -16,7 +15,6 @@ const getWeatherIcon = (iconCode?: string): ImageSourcePropType => {
     : require('../../../../assets/sun.png');
 };
 
-// ✅ **Navigation tipi ekleyerek hatayı düzeltiyoruz**
 type NavigationProp = StackNavigationProp<RootStackParamList, 'City Detail'>;
 
 const WeatherCard: React.FC<WeatherCardProps> = ({ city, temperature, condition, icon }) => {
