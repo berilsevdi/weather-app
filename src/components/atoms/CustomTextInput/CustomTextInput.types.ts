@@ -1,4 +1,4 @@
-import { TextInputProps, ViewStyle } from "react-native";
+import { TextInputProps, ViewStyle } from 'react-native';
 
 type CustomTextInputProps = TextInputProps & {
   label?: string;

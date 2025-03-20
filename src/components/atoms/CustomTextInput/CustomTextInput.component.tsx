@@ -1,7 +1,8 @@
-import React from "react";
-import { View, Text, TextInput } from "react-native";
-import { CustomTextInputProps } from "./CustomTextInput.types";
-import { styles } from "./CustomTextInput.style";
+import React from 'react';
+import { View, Text, TextInput } from 'react-native';
+
+import { styles } from './CustomTextInput.style';
+import { CustomTextInputProps } from './CustomTextInput.types';
 
 const CustomTextInput: React.FC<CustomTextInputProps> = ({
   label,

@@ -1,27 +1,20 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../scenes/HomeFlow/Home/HomeScreen.component";
-import SearchScreen from "../scenes/HomeFlow/Search/SearchScreen.component";
-import { Ionicons } from "@expo/vector-icons";
+import React from 'react';
 
-const Tab = createBottomTabNavigator();
+import { NavigationContainer } from '@react-navigation/native';
+
+import BottomTabNavigator from './BottomTabNavigator/BottomTabNavigator.component';
+
+export type RootStackParamList = {
+  HomeMain: undefined;
+  Search: undefined;
+  'City Detail': { cityName: string };
+};
 
 const AppNavigator = () => {
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarStyle: { backgroundColor: "#fff", height: 60 },
-        tabBarIcon: ({ color, size }) => {
-          let iconName;
-          if (route.name === "Hava Durumu") iconName = "home";
-          else if (route.name === "Şehir Ara") iconName = "search";
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-      })}
-    >
-      <Tab.Screen name="Hava Durumu" component={HomeScreen} />
-      <Tab.Screen name="Şehir Ara" component={SearchScreen} />
-    </Tab.Navigator>
+    <NavigationContainer>
+      <BottomTabNavigator />
+    </NavigationContainer>
   );
 };
 

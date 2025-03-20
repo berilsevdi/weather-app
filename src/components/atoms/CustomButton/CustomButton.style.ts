@@ -1,21 +1,21 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#007AFF",
+    backgroundColor: '#007AFF',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   disabledButton: {
-    backgroundColor: "#A0A0A0",
+    backgroundColor: '#A0A0A0',
   },
   text: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   loadingIndicator: {
     marginLeft: 8,

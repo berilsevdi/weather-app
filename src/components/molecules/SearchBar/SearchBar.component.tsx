@@ -1,11 +1,12 @@
-import React from "react";
-import { View, TextInput, TouchableOpacity } from "react-native";
-import { SearchBarProps } from "./SearchBar.types";
-import { styles } from "./SearchBar.style";
-import Icon from "../../atoms/Icon/Icon.component";
+import React from 'react';
+import { View, TextInput, TouchableOpacity } from 'react-native';
+
+import Icon from '../../atoms/Icon/Icon.component';
+import { styles } from './SearchBar.style';
+import { SearchBarProps } from './SearchBar.types';
 
 const SearchBar: React.FC<SearchBarProps> = ({
-  placeholder = "Şehir ara...",
+  placeholder = 'Şehir ara...',
   value,
   onChangeText,
   onSearchPress,
@@ -20,7 +21,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         onChangeText={onChangeText}
       />
       <TouchableOpacity onPress={onSearchPress} style={styles.icon}>
-        <Icon source={require("../../../../assets/search.png")} size={20} />
+        <Icon source={require('../../../../assets/search.png')} size={20} />
       </TouchableOpacity>
     </View>
   );

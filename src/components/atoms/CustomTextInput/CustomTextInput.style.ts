@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
@@ -6,21 +6,21 @@ export const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: "bold",
-    color: "#333",
+    fontWeight: 'bold',
+    color: '#333',
     marginBottom: 4,
   },
   input: {
     height: 40,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 6,
     paddingHorizontal: 10,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   errorText: {
     fontSize: 12,
-    color: "red",
+    color: 'red',
     marginTop: 4,
   },
 });

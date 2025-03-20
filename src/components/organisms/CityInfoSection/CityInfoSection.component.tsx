@@ -1,10 +1,17 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { CityInfoSectionProps } from "./CityInfoSection.types";
-import { styles } from "./CityInfoSection.style";
-import Icon from "../../atoms/Icon/Icon.component";
+import React from 'react';
+import { View, Text } from 'react-native';
 
-const CityInfoSection: React.FC<CityInfoSectionProps> = ({ cityName, country, population, timezone, flagIcon }) => {
+import Icon from '../../atoms/Icon/Icon.component';
+import { styles } from './CityInfoSection.style';
+import { CityInfoSectionProps } from './CityInfoSection.types';
+
+const CityInfoSection: React.FC<CityInfoSectionProps> = ({
+  cityName,
+  country,
+  population,
+  timezone,
+  flagIcon,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.row}>

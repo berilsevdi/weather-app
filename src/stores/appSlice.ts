@@ -1,26 +1,37 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
+const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 const API_KEY = process.env.OPENWEATHER_API_KEY;
 
-interface WeatherData {
+export interface WeatherData {
   city: string;
   temperature: number;
+  feelsLike: number;
+  tempMin: number;
+  tempMax: number;
+  humidity: number;
+  pressure: number;
+  windSpeed: number;
+  windDegree: number;
+  clouds: number;
   description: string;
   icon: string;
+  countryCode: string;
   timestamp: number;
 }
 
 interface CityInfo {
   name: string;
+  country: string;
   population: number;
   region: string;
+  timezone: string;
 }
 
 interface AppState {
-  weatherList: WeatherData[]; // Şehir listesi
-  searchResult: WeatherData | null; // Arama sonucu
+  weatherList: WeatherData[];
+  searchResult: WeatherData | null;
   cityInfo: CityInfo | null;
   loading: boolean;
   error: string | null;
@@ -34,66 +45,112 @@ const initialState: AppState = {
   error: null,
 };
 
-// **Birden fazla şehir için hava durumu çek**
-const defaultCities = ["Istanbul", "Ankara", "Izmir", "London", "New York"];
+const defaultCities = ['Istanbul', 'Ankara', 'Izmir', 'London', 'New York'];
+
 export const fetchWeatherList = createAsyncThunk(
-  "weather/fetchWeatherList",
+  'weather/fetchWeatherList',
   async (_, { rejectWithValue }) => {
     try {
-      const promises = defaultCities.map(async (city) => {
-        const response = await axios.get(`${BASE_URL}?q=${city}&units=metric&appid=${API_KEY}`);
-        return {
-          city: response.data.name,
-          temperature: response.data.main.temp,
-          description: response.data.weather[0].description,
-          icon: response.data.weather[0].icon || "01d",
-          timestamp: response.data.dt, 
-        };
-      });
+      console.log('📡 API çağrısı yapılıyor...');
 
-      const results = await Promise.all(promises);
+      const results = await Promise.all(
+        defaultCities.map(async city => {
+          const { data } = await axios.get(`${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`);
+          return {
+            city: data.name,
+            temperature: data.main.temp,
+            feelsLike: data.main.feels_like,
+            tempMin: data.main.temp_min,
+            tempMax: data.main.temp_max,
+            humidity: data.main.humidity,
+            pressure: data.main.pressure,
+            windSpeed: data.wind.speed,
+            windDegree: data.wind.deg,
+            clouds: data.clouds.all,
+            description: data.weather[0].description,
+            icon: data.weather[0].icon,
+            countryCode: data.sys.country,
+            timestamp: data.dt,
+          };
+        })
+      );
+      //console.log(" API’den gelen veri:", results);
       return results;
     } catch (error) {
-      return rejectWithValue("Şehir listesi yüklenirken hata oluştu.");
+      //console.error("API Hatası:", error);
+      return rejectWithValue('Şehir listesi yüklenirken hata oluştu.');
     }
   }
 );
 
-// **Tek bir şehir için hava durumu çek (Arama işlemi)**
 export const fetchWeather = createAsyncThunk<WeatherData, string, { rejectValue: string }>(
-  "weather/fetchWeather",
+  'weather/fetchWeather',
   async (city, { rejectWithValue }) => {
     try {
-      if (city.length < 3) {
-        return rejectWithValue("Lütfen en az 3 harf giriniz.");
-      }
-
-      const response = await axios.get(`${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`);
+      const { data } = await axios.get(`${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`);
 
       return {
-        city: response.data.name,
-        temperature: response.data.main.temp,
-        description: response.data.weather[0].description,
-        icon: response.data.weather[0].icon,
-        timestamp: response.data.dt,
+        city: data.name,
+        temperature: data.main.temp,
+        feelsLike: data.main.feels_like,
+        tempMin: data.main.temp_min,
+        tempMax: data.main.temp_max,
+        humidity: data.main.humidity,
+        pressure: data.main.pressure,
+        windSpeed: data.wind.speed,
+        windDegree: data.wind.deg,
+        clouds: data.clouds.all,
+        description: data.weather[0].description,
+        icon: data.weather[0].icon,
+        countryCode: data.sys.country,
+        timestamp: data.dt,
       };
-    } catch (error) {
-      return rejectWithValue("Şehir bulunamadı. Lütfen tam şehir adı giriniz.");
+    } catch {
+      return rejectWithValue('Hava durumu verisi alınamadı.');
     }
   }
 );
+
+export const fetchCityInfo = createAsyncThunk<
+  CityInfo,
+  { city: string; countryCode: string },
+  { rejectValue: string }
+>('weather/fetchCityInfo', async ({ city, countryCode }, { rejectWithValue }) => {
+  try {
+    console.log(
+      '🌍 REST Countries API İsteği Yapılıyor:',
+      `https://restcountries.com/v3.1/alpha/${countryCode}`
+    );
+
+    const response = await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
+    const data = await response.json();
+
+    if (!data || data.status === 404) throw new Error('Şehir bilgisi bulunamadı.');
+
+    return {
+      name: data[0].name?.common || 'Bilinmiyor',
+      country: data[0].name?.official || 'Bilinmiyor',
+      population: data[0].population || 0,
+      region: data[0].region || 'Bilinmiyor',
+      timezone: data[0].timezones?.[0] || 'Bilinmiyor',
+    };
+  } catch (error) {
+    console.error('Şehir Bilgisi API Hatası:', error);
+    return rejectWithValue('Şehir bilgisi bulunamadı.');
+  }
+});
+
 const appSlice = createSlice({
-  name: "weather",
+  name: 'weather',
   initialState,
   reducers: {
-    setCityInfo: (state, action: { payload: CityInfo }) => {
+    setCityInfo: (state, action) => {
       state.cityInfo = action.payload;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      // **Şehir listesi için case’ler**
-      .addCase(fetchWeatherList.pending, (state) => {
+      .addCase(fetchWeatherList.pending, state => {
         state.loading = true;
         state.error = null;
       })
@@ -103,21 +160,31 @@ const appSlice = createSlice({
       })
       .addCase(fetchWeatherList.rejected, (state, action) => {
         state.loading = false;
-        state.error = typeof action.payload === "string" ? action.payload : "Bilinmeyen hata";
+        state.error = typeof action.payload === 'string' ? action.payload : 'Bilinmeyen hata';
       })
-
-      // **Tek şehir araması için case’ler (Eksik Olan Kısım Eklendi!)**
-      .addCase(fetchWeather.pending, (state) => {
+      .addCase(fetchWeather.pending, state => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchWeather.fulfilled, (state, action) => {
         state.loading = false;
-        state.searchResult = action.payload; // 👈 Redux Store’a veriyi yazdık!
+        state.searchResult = action.payload;
       })
       .addCase(fetchWeather.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Bilinmeyen hata";
+        state.error = action.payload || 'Bilinmeyen hata';
+      })
+      .addCase(fetchCityInfo.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCityInfo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cityInfo = action.payload;
+      })
+      .addCase(fetchCityInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Bilinmeyen hata';
       });
   },
 });

@@ -1,17 +1,17 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
   },
   temperature: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   condition: {
     fontSize: 16,
-    color: "#666",
+    color: '#666',
   },
 });

@@ -1,10 +1,10 @@
-import { ImageSourcePropType } from "react-native";
+import { ImageSourcePropType } from 'react-native';
 
 type WeatherCardProps = {
   city: string;
   temperature: string;
   condition: string;
-  icon?: string; 
+  icon?: string;
 };
 
 export type { WeatherCardProps };

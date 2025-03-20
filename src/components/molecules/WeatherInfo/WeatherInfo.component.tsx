@@ -1,8 +1,9 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { WeatherInfoProps } from "./WeatherInfo.types";
-import { styles } from "./WeatherInfo.style";
-import Icon from "../../atoms/Icon/Icon.component";
+import React from 'react';
+import { View, Text } from 'react-native';
+
+import Icon from '../../atoms/Icon/Icon.component';
+import { styles } from './WeatherInfo.style';
+import { WeatherInfoProps } from './WeatherInfo.types';
 
 const WeatherInfo: React.FC<WeatherInfoProps> = ({ temperature, condition, icon }) => {
   return (
