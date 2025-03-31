@@ -18,6 +18,11 @@ Bu proje, "Oğuzhan Kurum React Native ve TypeScript Eğitimi" kursunun bitirme 
 - React Navigation
 - Yarn (paket yöneticisi)
 
+## Özellikler
+- Hava durumu gösterimi
+- Şehir arama ve şehir detayları
+- Anlık konumla hava durumu bilgisi
+
 ## Hariç Tutulan Dersler
 
 Bu ödevde Ders 8 (İzinler ve Bildirimler), Ders 9 (Animasyonlar ve Native Modüller), Ders 14 (Üçüncü Taraf Kütüphane Entegrasyonu) ve Ders 17 (Performans İzleme ve Hata Raporlama) konuları kullanılmamıştır.
