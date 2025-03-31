@@ -1,17 +1,15 @@
 import React, { useEffect, useMemo, useCallback, useState } from 'react';
 import { View, FlatList, ActivityIndicator, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../../stores/store';
-import {
-  fetchLocationForecast,
-  setCityInfo,
-  fetchCurrentWeather,
-} from '../../../stores/appSlice';
+
 import * as Location from 'expo-location';
+
+import CityInfoSection from '../../../components/organisms/CityInfoSection/CityInfoSection.component';
 import ForecastCard from '../../../components/organisms/ForecastCard/ForecastCard.component';
 import WeatherDetailCard from '../../../components/organisms/WeatherDetailCard/WeatherDetailCard.component';
-import CityInfoSection from '../../../components/organisms/CityInfoSection/CityInfoSection.component';
+import { fetchLocationForecast, setCityInfo, fetchCurrentWeather } from '../../../stores/appSlice';
 import { ForecastData } from '../../../stores/appSlice';
+import { RootState } from '../../../stores/store';
 import { styles } from './HomeScreen.style';
 
 const HomeScreen = () => {
@@ -72,7 +70,7 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       {loading || locationLoading ? (
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size='large' color='#007AFF' />
       ) : error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : (
@@ -81,7 +79,7 @@ const HomeScreen = () => {
 
           <FlatList
             data={memoizedForecast}
-            keyExtractor={(item) => item.date}
+            keyExtractor={item => item.date}
             renderItem={renderItem}
             horizontal
             showsHorizontalScrollIndicator={false}

@@ -1,20 +1,21 @@
 import React, { useEffect, useMemo, useCallback } from 'react';
 import { View, Text, ActivityIndicator, FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRoute } from '@react-navigation/native';
 
+import { useRoute } from '@react-navigation/native';
+import * as Location from 'expo-location';
+
+import CityInfoSection from '../../../components/organisms/CityInfoSection/CityInfoSection.component';
+import ForecastCard from '../../../components/organisms/ForecastCard/ForecastCard.component';
+import WeatherDetailCard from '../../../components/organisms/WeatherDetailCard/WeatherDetailCard.component';
 import {
   fetchWeather,
   fetchLocationForecast,
   setCityInfo,
   fetchCurrentWeather,
 } from '../../../stores/appSlice';
-import { RootState } from '../../../stores/store';
-import ForecastCard from '../../../components/organisms/ForecastCard/ForecastCard.component';
-import WeatherDetailCard from '../../../components/organisms/WeatherDetailCard/WeatherDetailCard.component';
-import CityInfoSection from '../../../components/organisms/CityInfoSection/CityInfoSection.component';
-import * as Location from 'expo-location';
 import { ForecastData } from '../../../stores/appSlice';
+import { RootState } from '../../../stores/store';
 import { styles } from './CityDetailScreen.style';
 
 const CityDetailScreen = () => {
@@ -70,7 +71,7 @@ const CityDetailScreen = () => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size='large' color='#007AFF' />
       ) : error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : (
@@ -79,7 +80,7 @@ const CityDetailScreen = () => {
 
           <FlatList
             data={memoizedForecast}
-            keyExtractor={(item) => item.date}
+            keyExtractor={item => item.date}
             renderItem={renderItem}
             horizontal
             showsHorizontalScrollIndicator={false}

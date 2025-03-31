@@ -182,7 +182,7 @@ const appSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-    
+
       .addCase(fetchWeather.pending, state => {
         state.loading = true;
         state.error = null;

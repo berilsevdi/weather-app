@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
-import { styles } from './ForecastCard.style';
+
 import { ForecastData } from '../../../stores/appSlice';
+import { styles } from './ForecastCard.style';
 
 interface Props {
   forecast: ForecastData;

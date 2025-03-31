@@ -1,7 +1,8 @@
-import React from "react";
-import { View, Text, Image } from "react-native";
-import { styles } from "./LocationWeatherCard.style";
-import { WeatherData } from "../../../stores/appSlice";
+import React from 'react';
+import { View, Text, Image } from 'react-native';
+
+import { WeatherData } from '../../../stores/appSlice';
+import { styles } from './LocationWeatherCard.style';
 
 interface Props {
   weather: WeatherData;

@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     paddingTop: 60,
     paddingHorizontal: 16,
   },
-  
+
   cityTitle: {
     fontSize: 32,
     fontWeight: '700',

@@ -19,5 +19,6 @@ export const styles = StyleSheet.create({
   value: {
     color: '#FFF',
     fontSize: 14,
-    fontWeight: '500',}
+    fontWeight: '500',
+  },
 });

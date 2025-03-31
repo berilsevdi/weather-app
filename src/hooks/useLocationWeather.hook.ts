@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
-import * as Location from "expo-location";
-import axios from "axios";
-import { WeatherData } from "../stores/appSlice";
+import { useEffect, useState } from 'react';
+
+import axios from 'axios';
+import * as Location from 'expo-location';
+
+import { WeatherData } from '../stores/appSlice';
 
 const API_KEY = process.env.OPENWEATHER_API_KEY;
-const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
+const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 const useLocationWeather = () => {
   const [locationWeather, setLocationWeather] = useState<WeatherData | null>(null);
@@ -18,8 +20,8 @@ const useLocationWeather = () => {
         setError(null);
 
         const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-          setError("Konum izni verilmedi.");
+        if (status !== 'granted') {
+          setError('Konum izni verilmedi.');
           setLoading(false);
           return;
         }
@@ -50,7 +52,7 @@ const useLocationWeather = () => {
 
         setLocationWeather(weather);
       } catch (err) {
-        setError("Konumdan hava durumu alınamadı.");
+        setError('Konumdan hava durumu alınamadı.');
       } finally {
         setLoading(false);
       }

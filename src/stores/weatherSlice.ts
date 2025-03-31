@@ -3,15 +3,12 @@ import axios from 'axios';
 
 const API_KEY = 'OPENWEATHER_API_KEYİNİ_YAZ';
 
-export const fetchWeather = createAsyncThunk(
-  'weather/fetchWeather',
-  async (city: string) => {
-    const res = await axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=tr`
-    );
-    return res.data;
-  }
-);
+export const fetchWeather = createAsyncThunk('weather/fetchWeather', async (city: string) => {
+  const res = await axios.get(
+    `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=tr`
+  );
+  return res.data;
+});
 
 const weatherSlice = createSlice({
   name: 'weather',
@@ -21,9 +18,9 @@ const weatherSlice = createSlice({
     error: null as string | null,
   },
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchWeather.pending, (state) => {
+      .addCase(fetchWeather.pending, state => {
         state.status = 'loading';
       })
       .addCase(fetchWeather.fulfilled, (state, action) => {

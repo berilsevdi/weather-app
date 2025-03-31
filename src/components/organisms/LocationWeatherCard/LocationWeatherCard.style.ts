@@ -1,26 +1,26 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#1e1e1e",
+    backgroundColor: '#1e1e1e',
     padding: 20,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
     marginVertical: 10,
     marginHorizontal: 16,
   },
   city: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   temperature: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 32,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   condition: {
-    color: "#ccc",
+    color: '#ccc',
     fontSize: 16,
   },
   icon: {
