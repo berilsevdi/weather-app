@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 const API_KEY = process.env.OPENWEATHER_API_KEY;
+const FORECAST_URL = 'https://api.openweathermap.org/data/2.5/forecast';
 
 export interface WeatherData {
   city: string;
@@ -21,6 +22,13 @@ export interface WeatherData {
   timestamp: number;
 }
 
+export interface ForecastData {
+  date: string;
+  temperature: number;
+  icon: string;
+  description: string;
+}
+
 interface CityInfo {
   name: string;
   country: string;
@@ -33,6 +41,8 @@ interface AppState {
   weatherList: WeatherData[];
   searchResult: WeatherData | null;
   cityInfo: CityInfo | null;
+  currentLocationForecast: ForecastData[];
+  currentWeather: WeatherData | null;
   loading: boolean;
   error: string | null;
 }
@@ -41,47 +51,75 @@ const initialState: AppState = {
   weatherList: [],
   searchResult: null,
   cityInfo: null,
+  currentLocationForecast: [],
+  currentWeather: null,
   loading: false,
   error: null,
 };
 
-const defaultCities = ['Istanbul', 'Ankara', 'Izmir', 'London', 'New York'];
+export const fetchLocationForecast = createAsyncThunk<
+  ForecastData[],
+  { lat: number; lon: number },
+  { rejectValue: string }
+>('weather/fetchLocationForecast', async ({ lat, lon }, { rejectWithValue }) => {
+  try {
+    const { data } = await axios.get(
+      `${FORECAST_URL}?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+    );
 
-export const fetchWeatherList = createAsyncThunk(
-  'weather/fetchWeatherList',
-  async (_, { rejectWithValue }) => {
-    try {
-      console.log('📡 API çağrısı yapılıyor...');
+    const dailyForecastMap = new Map<string, ForecastData>();
 
-      const results = await Promise.all(
-        defaultCities.map(async city => {
-          const { data } = await axios.get(`${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`);
-          return {
-            city: data.name,
-            temperature: data.main.temp,
-            feelsLike: data.main.feels_like,
-            tempMin: data.main.temp_min,
-            tempMax: data.main.temp_max,
-            humidity: data.main.humidity,
-            pressure: data.main.pressure,
-            windSpeed: data.wind.speed,
-            windDegree: data.wind.deg,
-            clouds: data.clouds.all,
-            description: data.weather[0].description,
-            icon: data.weather[0].icon,
-            countryCode: data.sys.country,
-            timestamp: data.dt,
-          };
-        })
-      );
-      //console.log(" API’den gelen veri:", results);
-      return results;
-    } catch (error) {
-      //console.error("API Hatası:", error);
-      return rejectWithValue('Şehir listesi yüklenirken hata oluştu.');
-    }
+    data.list.forEach((item: any) => {
+      const date = item.dt_txt.split(' ')[0];
+      const time = item.dt_txt.split(' ')[1];
+
+      if (time === '12:00:00' && !dailyForecastMap.has(date)) {
+        dailyForecastMap.set(date, {
+          date,
+          temperature: item.main.temp,
+          icon: item.weather[0].icon,
+          description: item.weather[0].description,
+        });
+      }
+    });
+
+    const forecastList = Array.from(dailyForecastMap.values());
+    return forecastList;
+  } catch (error) {
+    return rejectWithValue('Konum hava durumu verisi alınamadı.');
   }
-);
+});
+
+export const fetchCurrentWeather = createAsyncThunk<
+  WeatherData,
+  { lat: number; lon: number },
+  { rejectValue: string }
+>('weather/fetchCurrentWeather', async ({ lat, lon }, { rejectWithValue }) => {
+  try {
+    const { data } = await axios.get(
+      `${BASE_URL}?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+    );
+
+    return {
+      city: data.name,
+      temperature: data.main.temp,
+      feelsLike: data.main.feels_like,
+      tempMin: data.main.temp_min,
+      tempMax: data.main.temp_max,
+      humidity: data.main.humidity,
+      pressure: data.main.pressure,
+      windSpeed: data.wind.speed,
+      windDegree: data.wind.deg,
+      clouds: data.clouds.all,
+      description: data.weather[0].description,
+      icon: data.weather[0].icon,
+      countryCode: data.sys.country,
+      timestamp: data.dt,
+    };
+  } catch (error) {
+    return rejectWithValue('Anlık hava durumu verisi alınamadı.');
+  }
+});
 
 export const fetchWeather = createAsyncThunk<WeatherData, string, { rejectValue: string }>(
   'weather/fetchWeather',
@@ -117,11 +155,6 @@ export const fetchCityInfo = createAsyncThunk<
   { rejectValue: string }
 >('weather/fetchCityInfo', async ({ city, countryCode }, { rejectWithValue }) => {
   try {
-    console.log(
-      '🌍 REST Countries API İsteği Yapılıyor:',
-      `https://restcountries.com/v3.1/alpha/${countryCode}`
-    );
-
     const response = await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
     const data = await response.json();
 
@@ -135,7 +168,6 @@ export const fetchCityInfo = createAsyncThunk<
       timezone: data[0].timezones?.[0] || 'Bilinmiyor',
     };
   } catch (error) {
-    console.error('Şehir Bilgisi API Hatası:', error);
     return rejectWithValue('Şehir bilgisi bulunamadı.');
   }
 });
@@ -150,18 +182,7 @@ const appSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(fetchWeatherList.pending, state => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchWeatherList.fulfilled, (state, action) => {
-        state.loading = false;
-        state.weatherList = action.payload;
-      })
-      .addCase(fetchWeatherList.rejected, (state, action) => {
-        state.loading = false;
-        state.error = typeof action.payload === 'string' ? action.payload : 'Bilinmeyen hata';
-      })
+    
       .addCase(fetchWeather.pending, state => {
         state.loading = true;
         state.error = null;
@@ -183,6 +204,30 @@ const appSlice = createSlice({
         state.cityInfo = action.payload;
       })
       .addCase(fetchCityInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Bilinmeyen hata';
+      })
+      .addCase(fetchLocationForecast.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchLocationForecast.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentLocationForecast = action.payload;
+      })
+      .addCase(fetchLocationForecast.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Bilinmeyen hata';
+      })
+      .addCase(fetchCurrentWeather.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCurrentWeather.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentWeather = action.payload;
+      })
+      .addCase(fetchCurrentWeather.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Bilinmeyen hata';
       });

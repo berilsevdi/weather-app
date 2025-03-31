@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "teedoproject",
   "version": "1.0.0",
   "main": "index.ts",
@@ -46,6 +45,7 @@
     "expo-font": "~13.0.4",
     "expo-image": "~2.0.6",
     "expo-insights": "~0.8.2",
+    "expo-location": "^18.0.8",
     "expo-modules-core": "~2.2.2",
     "expo-notifications": "~0.29.13",
     "expo-status-bar": "~2.0.1",
