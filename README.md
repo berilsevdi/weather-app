@@ -29,4 +29,4 @@ Bu ödevde Ders 8 (İzinler ve Bildirimler), Ders 9 (Animasyonlar ve Native Mod�
 
 ## Ekran Videosu
 
-[Ekran Videosu Linki](#)
+[Ekran Videosu Linki](https://drive.google.com/file/d/1J5gquZumuzoM155ewGVxq1CUlAIainiT/view?usp=sharing)
